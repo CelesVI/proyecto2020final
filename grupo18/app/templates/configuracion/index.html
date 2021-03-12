@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block title %}Configuracion{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+<h1 class="text-center m-3">Configuracion del sistema</h1>
+</br>        
+    {% for con in config%}
+    <form class="ml-3" action=" {{ url_for('configuracion_update') }} " method="POST">
+        <input type="hidden" name="id" value="{{ con.id }}">
+        <label class="mt-3"> {{ con.nombre }} </label>
+        </br>
+        {% if con.nombre == 'cantidad_elementos' %}
+            <input type="number" name="valor" value="{{ con.valor }}" required>
+        {% elif con.nombre != 'habilitado' %}
+            <input type="text" id="{{ con.nombre }}" name="valor" value=" {{ con.valor }}" required>
+        {% elif con.valor == '1' %}
+            <input class="m-3" type="radio" name="valor" value="1" checked>
+            <label>Habilitado</label>
+            <input class="m-3" type="radio" name="valor" value="0">
+            <label>Inhabilitado</label>
+        {% else %}
+            <input class="m-3" type="radio" name="valor" value="1">
+            <label>Habilitado</label>
+            <input class="m-3" type="radio" name="valor" value="0" checked>
+            <label>Inhabilitado</label>
+        {% endif %}
+        <input class="btn btn-sm btn-success" type="submit" value="Guardar cambio">
+    </form>
+    {% endfor %}
+  <a href="{{ url_for('home') }}" class="btn btn-danger m-3">Volver</a>
+{% endblock %}

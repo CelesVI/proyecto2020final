@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% block title %}Centro{% endblock %}
+{% block head %}
+  {{ super() }}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+  integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+  crossorigin=""/>
+{% endblock %}
+{% block content %}
+  <h1 class="text-center m-3">Detalles de Centro</h1>
+
+    <ul class="list-group">
+        <li class="list-group-item list-group-item-info col-md-6">NOMBRE =  {{ centro.nombre }}</li>
+        <li class="list-group-item list-group-item-info col-md-6">DIRECCION = {{ centro.direccion }}</li>
+        <li class="list-group-item list-group-item-info col-md-6">TELEFONO = {{ centro.telefono }}</li>
+        <li class="list-group-item list-group-item-info col-md-6">HORA DE APERTURA = {{ centro.hora_de_apertura }}</li>
+        <li class="list-group-item list-group-item-info col-md-6">HORA DE CIERRE = {{ centro.hora_de_cierre }}</li>
+        <li class="list-group-item list-group-item-info col-md-6">TIPO CENTRO = {{ tipo.nombre}}</li>
+        <li class="list-group-item list-group-item-info col-md-6">MUNICIPIO = {{ municipio }}</li>
+        <li class="list-group-item list-group-item-info col-md-6">SITIO WEB = {{ centro.web }}</li>
+        <li class="list-group-item list-group-item-info col-md-6">EMAIL = {{ centro.email }}</li>
+        <li class="list-group-item list-group-item-info col-md-6">APROBACION = {{ aprobacion }}</li>
+        {% if centro.protocolo != '' %}
+          <li class="list-group-item list-group-item-info col-md-6">PROTOCOLO = <a href="{{ url_for('centro_descargar', name=centro.protocolo) }}"> Descargar </a></li>
+        {% endif %}
+        <li class="list-group-item list-group-item-info col-md-6">COORDENADAS</li>
+      </ul>
+      {%if centro.latitud %}
+        <input type="hidden" id="lat" value={{centro.latitud}}>
+        <input type="hidden" id="lng" value={{centro.longitud}}>
+  
+        <div class="m-3" id="myMap" style="height: 400px; width: 660px;"> </div>
+
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+          integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+          crossorigin=""></script>
+        <script>
+          const tilesProvider= 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+
+          let myMap = L.map('myMap').setView([-34.920457,-57.953536], 13)
+
+          L.tileLayer(tilesProvider, {
+              maxZoom: 18,
+          }).addTo(myMap)
+          var lt=document.getElementById("lat").value;
+          var lg=document.getElementById("lng").value;
+          marker = new L.marker([lt,lg]).addTo(myMap);
+          marker.bindPopup("<b>Este marcador se encuentra:</b><br>"+lt+", "+lg).openPopup();
+
+          </script>
+        {% endif %}
+    <a href="{{ url_for('centro_aprobacion', id=centro.id, num=2) }}" class="btn btn-success m-3">Aceptar Centro</a>
+    <a href="{{ url_for('centro_aprobacion', id=centro.id, num=3) }}" class="btn btn-danger m-3">Rechazar Centro</a>
+    <a href="{{ url_for('centro_edit', id=centro.id) }}" class="btn btn-info m-3">Editar Centro</a>
+    <a href="{{ url_for('centro_confirmar', name=centro.nombre) }}" class="btn btn-dark m-3">Eliminar Centro</a>
+    <a href="{{ url_for('centro_index', page_num=1) }}" class="btn btn-primary m-3">Volver</a>
+{% endblock %}

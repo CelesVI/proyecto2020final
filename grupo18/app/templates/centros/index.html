@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+{% block title %}Centros Sociales{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <h1 class="text-center m-3">Centros</h1>
+  <div>
+    <div>
+      <form class="ml-3" action="{{ url_for('centro_buscar', page_num=1) }}" method="POST">
+        <p>
+          <label>Filtro</label></br>
+            <select name='active'>
+              <option value='Todos' title="Mostrara los Centros sin importar su aprobacion">--Seleccione una opción--</option>
+              <option value='Aceptado'>Centro Aceptado</option>
+              <option value='Rechazado'>Centro Rechazado</option>
+              <option value='Pendiente'>Centro Pendiente</option>
+            </select>
+          <input type="text" name="name" placeholder="Buscar por nombre de centro">
+          <input type="submit" value="Buscar">
+        </p>
+      </form>
+    </div>
+  </div>
+</br>
+  <table class="table m-3">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Dirección</th>
+        <th scope="col">Municipio</th>
+        <th scope="col">Opciones</th>
+      </tr>
+    </thead>
+    {% for centro in centros.items %}
+      <tr>
+        <td>{{ centro.nombre }}</td> 
+        <td>{{ centro.direccion }}</td>
+        <td>{{ municipios["{}".format(centro.municipio_id)]["name"] }}</td> 
+        <td>
+          <a href="{{ url_for('centro_details', id=centro.id) }}">Detalles</a> | 
+          <a href="{{ url_for('index_by_centro', centro_id=centro.id, page_num=1) }}">Turnos</a>  
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+
+  {% if busqueda %}
+  <ul class="pagination">
+    {% if centros.has_prev %}
+     <li class="page-item"><a class="page-link" href="{{ url_for('centro_cbuscar', page_num=centros.prev_num, name=nombre, opcion=opcion) }}">Anterior</a></li>
+    {% else %}
+     <li class="page-item disabled"><span class="page-link">Anterior</span>
+    {% endif %}
+     </li>
+      
+    {% for page in centros.iter_pages(left_edge=3, right_edge=3) %}
+      {% if page %}
+      <li class="page-item"><a class="page-link" href="{{ url_for('centro_cbuscar', page_num=page, name=nombre, opcion=opcion) }}">{{ page }}</a></li>
+      {% else %}
+      <li class="page-item disabled" id="example_ellipsis"><a href="#" class="page-link">…</a></li> 
+      {% endif %}
+    {% endfor %}
+    
+    {% if centros.has_next %}
+     <li class="page-item"><a class="page-link" href="{{ url_for('centro_cbuscar', page_num=centros.next_num, name=nombre, opcion=opcion) }}">Siguiente</a></li>
+    {% else %}
+     <li class="page-item disabled"><span class="page-link">Siguiente</span>
+    {% endif %}
+  </ul>
+  {% else %}
+  <ul class="pagination">
+    {% if centros.has_prev %}
+     <li class="page-item"><a class="page-link" href="{{ url_for('centro_index', page_num=centros.prev_num) }}">Anterior</a></li>
+    {% else %}
+     <li class="page-item disabled"><span class="page-link">Anterior</span>
+    {% endif %}
+     </li>
+      
+    {% for page in centros.iter_pages(left_edge=3, right_edge=3) %}
+      {% if page %}
+      <li class="page-item"><a class="page-link" href="{{ url_for('centro_index', page_num=page) }}">{{ page }}</a></li>
+      {% else %}
+      <li class="page-item disabled" id="example_ellipsis"><a href="#" class="page-link">…</a></li> 
+      {% endif %}
+    {% endfor %}
+    
+    {% if centros.has_next %}
+     <li class="page-item"><a class="page-link" href="{{ url_for('centro_index', page_num=centros.next_num) }}">Siguiente</a></li>
+    {% else %}
+     <li class="page-item disabled"><span class="page-link">Siguiente</span>
+    {% endif %}
+  </ul>
+  {% endif %}
+
+  <a href="{{ url_for('centro_new') }}" class="btn btn-success m-3">Registrar nuevo centro</a>
+  <a href="{{ url_for('home') }}" class="btn btn-danger m-3">Volver al Home</a>
+  
+{% endblock %}

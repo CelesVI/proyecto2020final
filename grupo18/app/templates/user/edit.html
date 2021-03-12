@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block title %}Usuarios{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <h1 class="text-center m-3">Editar Usuario</h1>
+  <form class="m-3" action="{{ url_for('user_update', id=user.id) }}" method="POST">
+    <div class="form-group col-md-6">
+      <label>Email</label>
+      <input class="form-control" type="email" name="email" placeholder="Correo" value="{{ user.email}}"/>
+    </div>
+    <div class="form-group col-md-6">
+      <label>Nombre de usuario</label>
+      <input class="form-control" type="text" name="username" placeholder="Nombre de usuario" value="{{ user.username }}">
+    </div>
+    <div class="form-group col-md-6">
+      <label>Contraseña</label>
+      <input class="form-control" type="password" name="password" placeholder="Contraseña" value="{{ user.password }}"/>
+    </div>
+    <div class="form-group col-md-6">
+      <label>Nombre</label>
+      <input class="form-control" type="text" name="first_name" placeholder="Nombre" value="{{ user.first_name}}"/>
+    </div>
+    <div class="form-group col-md-6">
+      <label>Apellido</label>
+      <input class="form-control" type="text" name="last_name" placeholder="Apellido" value="{{ user.last_name}}"/>
+    </div>
+    <div class="m-3">
+      {% if is_admin %}
+        <div class="form-group form-check">
+          <input class="form-check-input" type="radio"  name="active" placeholder="Activo" value="True" checked/>
+          <label class="form-check-label">Activo</label>
+        </div>
+      {% else %}
+        {%if user.active %}
+          <div class="form-group form-check">
+            <input class="form-check-input" type="radio"  name="active" placeholder="Activo" value="True" checked/>
+            <label class="form-check-label">Activo</label>
+          </div>
+          <div class="form-group form-check">
+            <input class="form-check-input" type="radio" name="active" placeholder="Inactivo" value="False">
+            <label class="form-check-label">Inactivo</label>
+          </div>
+        {% else %}
+          <div class="form-group form-check">
+            <input class="form-check-input" type="radio"  name="active" placeholder="Activo" value="True"/>
+            <label class="form-check-label">Activo</label>
+          </div>
+          <div class="form-group form-check">
+            <input class="form-check-input" type="radio" name="active" placeholder="Inactivo" value="False" checked>
+            <label class="form-check-label">Inactivo</label>
+          </div>
+        {% endif %}
+      {% endif %}
+      </div>
+    <input type="submit" value="Guardar" class="btn btn-success">
+    <a href="{{ url_for('user_index', page_num=1) }}" class="btn btn-danger m-3">Volver</a>
+  </form>
+{% endblock %}

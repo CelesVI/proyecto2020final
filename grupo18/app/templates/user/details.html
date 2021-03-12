@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block title %}Perfil{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <h1 class="text-center m-3">Perfil de Usuario</h1>
+
+    <ul class="list-group">
+        <li class="list-group-item list-group-item-info col-md-6">NOMBRE =  {{ user.first_name }}</li>
+        <li class="list-group-item list-group-item-info col-md-6">APELLIDO = {{ user.last_name }}</li>
+        <li class="list-group-item list-group-item-info col-md-6">EMAIL = {{ user.email }}</li>
+        <li class="list-group-item list-group-item-info col-md-6">USERNAME = {{ user.username }}</li>
+        <li class="list-group-item list-group-item-info col-md-6">ESTADO ATIVADO = {{ user.active }}</li>
+    </ul>
+  
+    <a href="{{ url_for('user_index', page_num=1) }}" class="btn btn-danger m-3">Volver</a>
+{% endblock %}

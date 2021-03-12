@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}Usuarios{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <h1>Eliminar Usuario</h1>
+  <div>
+    <h2>¿Estas seguro de querer borrar el usuario?</h2>
+  </div>
+</br>
+    <a href="{{ url_for('user_delete', username=username) }}" class="link">Eliminar</a>       
+    <a href="{{ url_for('user_index', page_num=1) }}" class="link">Cancelar</a>
+{% endblock %}

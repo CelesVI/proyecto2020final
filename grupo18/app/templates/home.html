@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="text-center m-3">Bienvenidos</h1>
+  <p class="text-center m-3">Página de inicio de la aplicación</p>
+  {% if not is_authenticated(session) %}
+    <div class="d-flex justify-content-center m-3">
+      <a href="{{ url_for('auth_login') }}" class="btn btn-primary w-25">Iniciar sesión</a>
+    </div>
+  {% endif %}
+
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "layout.html" %} {% block title %}Nuevo turno{% endblock %} {% block head %} {{ super() }} {% endblock %} {% block content %}
+<h1 class="text-center m-3">Crear un nuevo turno</h1>
+<form action="{{ url_for('create_by_centro', centro_id=centro_id) }}" method="POST">
+    <div class="form-group col-md-6">
+        <label>Nombre</label>
+        <input class="form-control" type="text" name="nombre" placeholder="Nombre" />
+    </div>
+    <div class="form-group col-md-6">
+        <label>Apellido</label>
+        <input class="form-control" type="text" name="apellido" placeholder="Apellido" />
+    </div>
+    <div class="form-group col-md-6">
+        <label>Email</label>
+        <input class="form-control" type="email" name="email" placeholder="example@example.com" />
+    </div>
+    <div class="form-group col-md-6">
+        <label>Telefono</label>
+        <input class="form-control" type="text" name="telefono" placeholder="221-5555555" />
+    </div>
+    <div class="form-group col-md-6">
+        <label>Hora de inicio</label>
+        <input class="form-control" type="time" name="hora_inicio" placeholder="09:00" />
+    </div>
+    <div class="form-group col-md-6">
+        <label>Hora de fin</label>
+        <input class="form-control" type="time" name="hora_fin" placeholder="09:30" />
+    </div>
+    <div class="form-group col-md-6">
+        <label>Fecha</label>
+        <input class="form-control" type="date" name="fecha" placeholder="DD/MM/AAAA" />
+    </div>
+    <input class="btn btn-success m-3" type="submit" value="Crear">
+    <a href="{{url_for('index_by_centro', centro_id=centro_id, page_num=1)}}" class="btn btn-danger m-3">Volver</a>
+</form>
+{% endblock %}

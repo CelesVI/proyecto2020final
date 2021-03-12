@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}Centros{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <h1>Eliminar Centro</h1>
+  <div>
+    <h2>¿Estas seguro de borrar el Centro?</h2>
+  </div>
+</br>
+    <a href="{{ url_for('centro_delete', name=name) }}" class="link">Eliminar</a>       
+    <a href="{{ url_for('centro_index', page_num=1) }}" class="link">Cancelar</a>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}Turno{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <h1>Eliminar Turno</h1>
+  <div>
+    <h2>¿Estas seguro de querer borrar el turno?</h2>
+  </div>
+</br>
+    <a href="{{url_for('delete_by_centro', centro_id=centro_id, turno_id=turno_id)}}" class="btn btn-danger m-3">Eliminar</a>       
+    <a href="{{url_for('index_by_centro', centro_id=centro_id, page_num=1)}}" class="btn btn-success m-3">Cancelar</a>
+{% endblock %}

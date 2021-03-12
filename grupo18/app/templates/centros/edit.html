@@ -1,0 +1,133 @@
+{% extends "layout.html" %}
+{% block title %}Centros Sociales{% endblock %}
+{% block head %}
+  {{ super() }}
+<script src="https://unpkg.com/vue"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+  integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+  crossorigin=""/>
+{% endblock %}
+{% block content %}
+  <h1 class="text-center m-3">Editar Usuario</h1>
+  <form class="m-3" action="{{ url_for('centro_update', id=centro.id) }}" method="POST" enctype="multipart/form-data">
+    <div class="form-group col-md-6">
+      <label>Nombre</label>
+      <input class="form-control" type="text" name="nombre" placeholder="Nombre" value="{{ centro.nombre}}"/>
+    </div>
+    <div class="form-group col-md-6">
+      <label>Tipo de Centro</label>
+        <select name="tipo_centro_id">
+        {% for tipo in lista_tipos %}
+            <option value='{{tipo.id}}'>{{ tipo.nombre }}</option>
+        {%endfor%}
+        </select>
+    </div>
+    <div class="form-group col-md-6">
+      <label>Direccion</label>
+      <input class="form-control" type="text" name="direccion" placeholder="Nombre de usuario" value="{{ centro.direccion }}">
+    </div>
+    <div class="form-group col-md-6">
+      <label>Telefono</label>
+      <input class="form-control" type="text" name="telefono" placeholder="Contraseña" value="{{ centro.telefono }}"/>
+    </div>
+    <div class="form-group col-md-6">
+      <label>Hora de Apertura</label>
+      <input class="form-control" type="time" name="hora_de_apertura" value="{{ centro.hora_de_apertura}}"/>
+    </div>
+    <div class="form-group col-md-6">
+      <label>Hora de Cierre</label>
+      <input class="form-control" type="time" name="hora_de_cierre" value="{{ centro.hora_de_cierre}}"/>
+    </div>
+    <div class="form-group col-md-6" id="app">
+        <label>Municipio</label>
+          <h6>Actual: {{municipios["{}".format(centro.municipio_id)]['name']}}</h6>
+          <select name="municipio_id">
+            {% for municipio in municipios %}
+                <option value='{{municipio}}'>{{ municipios[municipio]['name'] }}</option>
+            {%endfor%}
+          </select>
+    </div>
+    <div class="form-group col-md-6">
+        <label>Web</label>
+        <input class="form-control" type="text" name="web" placeholder="Web" value="{{ centro.web }}"/>
+    </div>
+    <div class="form-group col-md-6">
+        <label>Email</label>
+        <input class="form-control" type="email" name="email" placeholder="email" value="{{ centro.email }}"/>
+    </div>
+    <div class="form-group col-md-6">
+      <h3><label> Selecciona un PDF</label></h3>
+      <div class="form-group col-md-6">
+          <input type="file" class="form-group col-md-6" name="protocolo" id="protocolo"> 
+      </div>
+    </div>
+    
+    <div class="form-group col-md-6">
+        <label>Aprobación</label>
+      
+        <!-- Group of default radios - option 1 -->
+        <div class="custom-control custom-radio">
+          <input type="radio" class="custom-control-input" id="defaultGroupExample1" name="aprobacion_id" value="1" checked>
+          <label class="custom-control-label" for="defaultGroupExample1">Pendiente</label>
+        </div>
+        <!-- Group of default radios - option 2 -->
+        <div class="custom-control custom-radio">
+          <input type="radio" class="custom-control-input" id="defaultGroupExample2" name="aprobacion_id" value="2">
+          <label class="custom-control-label" for="defaultGroupExample2">Aceptado</label>
+        </div>
+        <!-- Group of default radios - option 3 -->
+        <div class="custom-control custom-radio">
+          <input type="radio" class="custom-control-input" id="defaultGroupExample3" name="aprobacion_id" value="3">
+          <label class="custom-control-label" for="defaultGroupExample3">Rechazada</label>
+        </div>
+    </div>
+    <div class="form-group col-md-6">
+      <label>Coordenadas</label>
+      <input type="hidden" id="lat" value={{centro.latitud}}>
+      <input type="hidden" id="lng" value={{centro.longitud}}>
+
+        <div id="myMap" style="height: 400px"> </div>
+
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+           integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+           crossorigin=""></script>
+        <script>
+          const tilesProvider= 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+
+          let myMap = L.map('myMap').setView([-34.920457,-57.953536], 13)
+
+          L.tileLayer(tilesProvider, {
+              maxZoom: 18,
+          }).addTo(myMap)
+
+          myMap.doubleClickZoom.disable()
+
+          var marker;
+          var latlng;
+          var lt=document.getElementById("lat").value;
+          var lg=document.getElementById("lng").value;
+          if (document.getElementById("lat").value != "") {
+            marker = new L.marker([lt,lg]).addTo(myMap);
+            marker.bindPopup("<b>Este marcador se encuentra:</b><br>"+lt+", "+lg).openPopup();
+          }
+
+          function onMapClick(e) {
+            if (marker) {
+              myMap.removeLayer(marker);
+            }
+            latlng= e.latlng;
+            marker = new L.marker(latlng).addTo(myMap);
+            marker.bindPopup("<b>Este marcador se encuentra:</b><br>"+ latlng.toString()).openPopup();
+            document.getElementById("latitud").value = latlng.lat;
+            document.getElementById("longitud").value = latlng.lng;
+          }
+          myMap.on('click', onMapClick);
+        </script>
+
+        <input type="hidden" id="latitud" name="latitud">
+        <input type="hidden" id="longitud" name="longitud">
+    </div>
+    <input type="submit" value="Guardar" class="btn btn-success">
+    <a href="{{ url_for('centro_details', id=centro.id) }}" class="btn btn-danger m-3">Volver</a>
+  </form>
+{% endblock %}

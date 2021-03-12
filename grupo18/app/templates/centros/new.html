@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+{% block title %}Centros Sociales{% endblock %}
+{% block head %}
+  {{ super() }}
+<script src="https://unpkg.com/vue"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+  integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+  crossorigin=""/>
+{% endblock %}
+{% block content %}
+  <h1 class="text-center m-3">Crear un Centro</h1>
+  <h5>Los campos con { * } son obligatorios</h5>
+  <form action="{{ url_for('centro_create') }}" method="POST" enctype="multipart/form-data">
+    <div class="form-group col-md-6">
+      <label>Nombre *</label>
+      <input class="form-control" type="text" name="nombre" placeholder="Nombre"/>
+      </div>
+    <div class="form-group col-md-6">
+      <label>Dirección *</label>
+      <input class="form-control" type="text" name="direccion" placeholder="Dirección"/>
+    </div>
+    <div class="form-group col-md-6">
+      <label>Tipo de Centro</label>
+        <select name="tipo_centro_id">
+        {% for tipo in lista_tipos %}
+            <option value='{{tipo.id}}'>{{ tipo.nombre }}</option>
+        {%endfor%}
+        </select>
+    </div>
+    <div class="form-group col-md-6">
+      <label>Telefono *</label>
+      <input class="form-control" type="text" name="telefono" placeholder="Teléfono"/>
+    </div>
+    <div class="form-group col-md-6">
+        <label>Hora de Apertura *</label>
+        <input class="form-control" type="time" name="hora_de_apertura" placeholder=""/>
+    </div>
+    <div class="form-group col-md-6">
+        <label>Hora de Cierre *</label>
+        <input class="form-control" type="time" name="hora_de_cierre" placeholder=""/>
+    </div>
+    <div class="form-group col-md-6" id="app">
+        <label>Municipio *</label>
+        <select name="municipio_id">
+          {% for municipio in municipios %}
+              <option value='{{municipio}}'>{{ municipios[municipio]['name'] }}</option>
+          {%endfor%}
+          </select>
+    </div>
+    <div class="form-group col-md-6">
+        <label>Web</label>
+        <input class="form-control" type="text" name="web" placeholder="Sitio Web si posee"/>
+    </div>
+    <div class="form-group col-md-6">
+        <label>Email</label>
+        <input class="form-control" type="email" name="email" placeholder="Correo si posee"/>
+    </div>
+    <div class="form-group col-md-6">
+      <h3><label> Selecciona un PDF</label></h3>
+      <div class="form-group col-md-6">
+          <input type="file" class="form-group col-md-6" name="protocolo" id="protocolo"> 
+      </div>
+    </div>
+    <div class="form-group col-md-6">
+        <label>Coordenadas</label>
+        <div id="myMap" style="height: 400px"> </div>
+
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+           integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+           crossorigin=""></script>
+        <script>
+          const tilesProvider= 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+
+          let myMap = L.map('myMap').setView([-34.920457,-57.953536], 13)
+
+          L.tileLayer(tilesProvider, {
+              maxZoom: 18,
+          }).addTo(myMap)
+
+         myMap.doubleClickZoom.disable()
+
+          var marker;
+          var latlng;
+
+          function onMapClick(e) {
+            if (marker) {
+              myMap.removeLayer(marker);
+            }
+            latlng= e.latlng;
+            marker = new L.marker(latlng).addTo(myMap);
+            marker.bindPopup("<b>Este marcador se encuentra:</b><br>"+ latlng.toString()).openPopup();
+            document.getElementById("latitud").value = latlng.lat;
+            document.getElementById("longitud").value = latlng.lng;
+          }
+          myMap.on('click', onMapClick);
+
+        </script>
+
+        <input type="hidden" id="latitud" name="latitud">
+        <input type="hidden" id="longitud" name="longitud">
+    </div>
+    <input class="btn btn-success m-3" type="submit" value="Registrar">
+    <a href="{{ url_for('centro_index', page_num=1) }}" class="btn btn-danger ml-2">Volver</a>
+  </form>
+{% endblock %}

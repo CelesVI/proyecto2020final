@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block title %}Usuarios{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <h1 class="text-center m-3">Asignacion de roles a usuario</h1>
+  <div>
+    <h4>Roles actuales del usuario:</h4>
+    <ul>
+      {% if user.roles|length > 0 %}
+          {% for rol in user.roles %}
+          <form action="{{ url_for('user_quitarRoles', username=user.username) }}" method="POST">
+            <div>
+              <label>{{rol.nombre}}</label>
+              <input hi type="hidden" name="nombre" value="{{ rol.nombre }}">
+              <input type="submit" value="Eliminar">
+            </div>
+          </form>
+          </br>
+          {%endfor%}
+        
+      {% else %}
+          <div class="alert alert-danger col-md-6">Este usuario no tiene roles</div>
+      {% endif %}
+    </ul>
+  </div>
+  <div>
+    <h4>Seleccione los roles que desea asignar al usuario {{ user.username }}</h4>
+  </div>
+  <form action="{{ url_for('user_updateRoles', id=user.id) }}" method="POST">
+  {% for rol in roles %}
+    {% if rol not in user.roles %}
+      <p>
+        <input type="checkbox" name="id" value="{{ rol.id }}">  
+        <label>{{ rol.nombre }}</label>
+      </p>
+    {% else %}
+      <p>
+        <input type="checkbox" name="id" value="{{ rol.id }}" checked>  
+        <label>{{ rol.nombre }} (El usuario ya tiene rol de {{ rol.nombre }})</label>
+      </p>
+    {% endif %}
+  {%endfor%}
+    <input class="btn btn-primary" type="submit" value="Guardar">
+  </form>
+</br>    
+    <a href="{{ url_for('user_index', page_num=1) }}" class="btn btn-danger">Volver</a>
+{% endblock %}

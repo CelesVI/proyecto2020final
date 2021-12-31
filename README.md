@@ -46,4 +46,29 @@ Configuración admin / admin configuration
 
 ![config](https://user-images.githubusercontent.com/38327663/147828105-329e72fe-46fc-4302-99e8-c1a88b4d8a3a.png)
 
+Crear usuario / Create user
+
+![crearusuario](https://user-images.githubusercontent.com/38327663/147829131-90ad7921-b7c7-4749-bd13-b2e1f01605a2.png)
+
+Menú turnos / Appointments Menu
+
+![menuturnos](https://user-images.githubusercontent.com/38327663/147829133-f7fb9362-e413-41a6-8f2f-98187b48c673.png)
+
+Menú frontend / frontend menu
+
+![webmenu](https://user-images.githubusercontent.com/38327663/147828114-4b11285c-320e-4e32-873c-cca73ebd8a96.png)
+
+Validación de turnos / Appointment validations
+
+![turnovalidaciones](https://user-images.githubusercontent.com/38327663/147828118-f162032b-14d7-472c-8dec-3534f346474a.png)
+
+Registro de centro / Register center
+
+![registercentro1](https://user-images.githubusercontent.com/38327663/147828306-a2222059-fabf-4efa-81a3-b783a1c0d050.png)
+
+Registro de centro por mapa / Register center by map
+
+![registercentro2](https://user-images.githubusercontent.com/38327663/147828310-d36d45ee-8d65-49c7-8b98-d06566f15602.png)
+
+
 
